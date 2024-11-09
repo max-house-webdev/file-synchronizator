@@ -164,3 +164,4 @@ cython_debug/
 # max house
 .vscode
 TODO.md
+local_dir
