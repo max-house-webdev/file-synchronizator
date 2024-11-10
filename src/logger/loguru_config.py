@@ -4,8 +4,6 @@ import os
 from sys import stderr, stdout
 from typing import Any, Dict, Literal
 
-from loguru import logger
-
 LOG_DIR = "logs"
 
 LOG_ALL = "synchronizer.log"
@@ -21,22 +19,20 @@ LOGGER_CONFIG: Dict[TKey, Any] = {
     "handlers": [
         {
             "sink": stderr or stdout,
-            "format": "* synchronizer {time:HH:mm:ss}:\t{message}",
+            "format": "* synchronizer <cyan>{time:HH:mm:ss}</cyan>:\t<yellow>{message}</yellow>",
             "level": "INFO",
         },
         {
             "sink": log_all_path,
             "format": "{time}:\t[{level}]\t{message}",
             "level": "TRACE",
-            "retention": "3 days"
+            "rotation": "1 week"
         },
         {
             "sink": log_info_path,
             "format": "{time}:\t[{level}]\t{message}",
             "level": "INFO",
-            "retention": "3 days"
+            "rotation": "1 day"
         },
     ]
 }
-
-logger.configure(**LOGGER_CONFIG)

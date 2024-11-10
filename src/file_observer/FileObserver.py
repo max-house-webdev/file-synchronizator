@@ -7,7 +7,7 @@ class FileObserver(FileObserverAbstraction):
     """File observer implementation
     """
 
-    def update_local_files_storage(self):
+    def observe_local_files_storage(self):
         self.local_files_storage.clear()
 
         file_list = os.listdir(self.local_dir)

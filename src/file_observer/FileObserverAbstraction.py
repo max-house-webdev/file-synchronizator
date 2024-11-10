@@ -36,6 +36,6 @@ class FileObserverAbstraction(ABC):
         self.__is_observing = is_observing
 
     @abstractmethod
-    def update_local_files_storage(self):
+    def observe_local_files_storage(self):
         """ Update the dict storage of files in local directory
         """

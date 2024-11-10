@@ -1,15 +1,13 @@
+
 import time
 
 import requests
 
-from src.config.constant import INTERVAL
-from src.config.get_env import get_env
-from src.config.set_local_dir_path import set_local_dir_path
+from src.env_loader.EnvLoader import EnvLoader
 from src.file_observer.FileObserver import FileObserver
-from src.logger.log_messages import (APP_STARTED, APP_WORKING,
-                                     COULD_NOT_LOAD_ENV,
-                                     ENV_LOADED_SUCCESSFULLY, local_dir)
-from src.logger.loguru_config import logger
+from src.logger.logger import (APP_STARTED, APP_STOPPED, APP_STOPPED_IN_ERROR,
+                               APP_WORKING, ENV_LOADED_SUCCESSFULLY, local_dir,
+                               logger)
 from src.yandex_loader.CloudLoader import CloudLoader
 
 
@@ -17,50 +15,41 @@ def main():
     """Main entrypoint
     """
     # load environment variables
-    env, env_error = get_env()
+    env = EnvLoader()
 
-    if env_error is not None:
-        logger.critical(env_error)
-
-        return
-
-    if env is None:
-        logger.error(
-            COULD_NOT_LOAD_ENV)
+    if env.ERROR is not None:
+        logger.exception(env.ERROR)
+        logger.info(APP_STOPPED_IN_ERROR)
 
         return
 
     logger.debug(ENV_LOADED_SUCCESSFULLY)
-    # successful start
     logger.info(
         APP_STARTED)
+    logger.debug(local_dir(env.LOCAL_DIR_PATH))
 
-    logger.info("info")
-    logger.error("error")
-    logger.critical("critical")
-    logger.exception("exception")
-
-    # set absolute path to local directory
-    local_dir_name = set_local_dir_path(env["PARENT_DIR"])
-    logger.debug(local_dir(local_dir_name))
     # todo: this works
-    # session = requests.Session()
+    session = requests.Session()
 
-    # cloud_loader = CloudLoader(session, env["CLOUD_URL"], env["TOKEN"])
+    cloud_loader = CloudLoader(session, env.CLOUD_URL, env.TOKEN)
 
-    # content, code = cloud_loader.get_resource_list()
+    content, code = cloud_loader.get_resource_list()
 
-    # logger.info(code)
-    # logger.info(content)
-    # todo: this works
-    observer = FileObserver(local_dir_name)
+    logger.info(code)
+    logger.info(content)
+
+    observer = FileObserver(env.LOCAL_DIR_PATH)
 
     while observer.is_observing:
-        observer.update_local_files_storage()
+        observer.observe_local_files_storage()
         logger.info(observer.local_files_storage)
-        time.sleep(INTERVAL)
+        logger.info(hash(repr(observer.local_files_storage)))
+        time.sleep(env.PERIOD)
 
     logger.info(APP_WORKING)
+
+    # this line should be last one
+    logger.info(APP_STOPPED)
 
 
 if __name__ == "__main__":
