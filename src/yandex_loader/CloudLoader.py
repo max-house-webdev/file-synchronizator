@@ -6,7 +6,7 @@ class CloudLoader(CloudLoaderAbstraction):
     """
 
     def get_resource_list(self):
-        uri = f"{self.cloud_url}?path={self.CLOUD_DIR}"
+        uri = f"{self.cloud_url}?path={self.cloud_dir}"
 
         response = self.session.get(uri,
                                     headers=self.headers,

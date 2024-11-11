@@ -1,7 +1,4 @@
-
 import time
-
-import requests
 
 from src.env_loader.EnvLoader import EnvLoader
 from src.file_observer.FileObserver import FileObserver
@@ -28,11 +25,12 @@ def main():
         APP_STARTED)
     logger.debug(local_dir(env.LOCAL_DIR_PATH))
 
-    # todo: this works
-    session = requests.Session()
+    cloud_loader = CloudLoader(
+        cloud_url=env.CLOUD_URL,
+        cloud_dir=env.CLOUD_DIR_NAME,
+        _token=env.TOKEN)
 
-    cloud_loader = CloudLoader(session, env.CLOUD_URL, env.TOKEN)
-
+    # todo: debug
     content, code = cloud_loader.get_resource_list()
 
     logger.info(code)

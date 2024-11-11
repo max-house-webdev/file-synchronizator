@@ -14,47 +14,19 @@ class CloudLoaderAbstraction(ABC):
 
     TIMEOUT = 5
 
-    def __init__(self,
-                 session: requests.Session,
-                 cloud_url: str,
-                 token: str):
-
-        self.__CLOUD_DIR = "app:/"
-
-        self.__session = session
-        self.__cloud_url = cloud_url
-        self.__session = session
-
-        self.__headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"OAuth {token}"
-        }
-
-    @property
-    def CLOUD_DIR(self):
-        """App cloud directory identifier
-
-        used in uri
-        """
-        return self.__CLOUD_DIR
-
-    @property
-    def cloud_url(self):
-        """Cloud base ur
-        """
-        return self.__cloud_url
-
-    @property
-    def session(self) -> requests.Session:
-        """Request session
-        """
-        return self.__session
+    cloud_url: str
+    cloud_dir: str
+    _token: str
+    session = requests.Session()
 
     @property
     def headers(self):
         """HTTP-headers
         """
-        return self.__headers
+        return {
+            "Content-Type": "application/json",
+            "Authorization": f"OAuth {self._token}"
+        }
 
     @abstractmethod
     def get_resource_list(self) -> Tuple[bytes | Any, int]:

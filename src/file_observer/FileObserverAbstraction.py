@@ -1,6 +1,6 @@
 import pathlib
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict
 
 
@@ -9,31 +9,9 @@ class FileObserverAbstraction(ABC):
     """File observer abstraction implementation
     """
 
-    def __init__(self,
-                 local_dir: pathlib.Path):
-        self.__local_dir = local_dir
-        self.__is_observing = True
-
-        self.local_files_storage: Dict[str, float] = {}
-
-    @property
-    def local_dir(self) -> pathlib.Path:
-        """Absolute path to local directory
-        """
-        return self.__local_dir
-
-    @property
-    def is_observing(self) -> bool:
-        """Flag
-
-        if True should observe local directory
-        stop observing otherwise
-        """
-        return self.__is_observing
-
-    @is_observing.setter
-    def is_observing(self, is_observing: bool):
-        self.__is_observing = is_observing
+    local_dir: pathlib.Path
+    is_observing: bool = True
+    local_files_storage: Dict[str, float] = field(default_factory=dict)
 
     @abstractmethod
     def observe_local_files_storage(self):
