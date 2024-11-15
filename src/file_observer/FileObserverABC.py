@@ -5,8 +5,8 @@ from typing import Dict
 
 
 @dataclass
-class FileObserverAbstraction(ABC):
-    """File observer abstraction implementation
+class FileObserverABC(ABC):
+    """File observer abstraction
     """
 
     local_dir: pathlib.Path

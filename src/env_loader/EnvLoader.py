@@ -1,30 +1,33 @@
 import os
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
 from dotenv import load_dotenv
 
-TKey = Literal["TOKEN"] | \
-    Literal["CLOUD_URL"] | \
-    Literal["CLOUD_DIR_NAME"] | \
-    Literal["LOCAL_DIR_PATH"] | \
-    Literal["SYNCHRONIZATION_PERIOD"]
+TKey = Literal['TOKEN'] | \
+    Literal['CLOUD_URL'] | \
+    Literal['CLOUD_DIR_NAME'] | \
+    Literal['LOCAL_DIR_PATH'] | \
+    Literal['SYNCHRONIZATION_PERIOD']
 
 
+@dataclass
 class EnvLoader():
     """Environment variables loader
     """
 
-    DEFAULT = "DEFAULT"
+    DEFAULT = 'DEFAULT'
 
     def __init__(self):
 
-        self.__token: str = ""
-        self.__cloud_url: str = ""
-        self.__cloud_dir_name: str = ""
+        self.__token: str = ''
+        self.__cloud_url: str = ''
+        self.__cloud_dir_name: str = ''
 
-        self.__local_dir_name = "local_dir"
-        self.__local_dir_path: Path = Path.cwd().absolute().joinpath(self.__local_dir_name)
+        self.__local_dir_name = 'local_dir'
+        self.__local_dir_path: Path = Path.cwd().absolute().\
+            joinpath(self.__local_dir_name)
 
         self.__period = 0
 
@@ -72,10 +75,10 @@ class EnvLoader():
         try:
             value = os.environ[key_]
 
-            if value == "" or \
-                    value.strip().upper() == "NONE" or \
+            if value == '' or \
+                    value.strip().upper() == 'NONE' or \
             value.strip().upper() == self.DEFAULT:
-                if key_ == "LOCAL_DIR_PATH":
+                if key_ == 'LOCAL_DIR_PATH':
 
                     return self.DEFAULT, None
 
@@ -93,8 +96,14 @@ class EnvLoader():
     def __load_env(self):
         load_dotenv()
 
-        keys = ("TOKEN", "CLOUD_URL", "CLOUD_DIR_NAME", "LOCAL_DIR_PATH",
-                "SYNCHRONIZATION_PERIOD")
+        keys = (
+            'TOKEN',
+            'CLOUD_URL',
+            'CLOUD_DIR_NAME',
+
+            'LOCAL_DIR_PATH',
+            'SYNCHRONIZATION_PERIOD'
+        )
 
         try:
             for key in keys:
@@ -109,19 +118,19 @@ class EnvLoader():
                 if value is None:
                     raise ValueError(f"Environment variable {key} is None")
 
-                if key == "TOKEN":
+                if key == 'TOKEN':
                     self.__token = value
 
-                elif key == "CLOUD_URL":
+                elif key == 'CLOUD_URL':
                     self.__cloud_url = value
 
-                elif key == "CLOUD_DIR_NAME":
+                elif key == 'CLOUD_DIR_NAME':
                     self.__cloud_dir_name = value
 
-                elif key == "LOCAL_DIR_PATH":
+                elif key == 'LOCAL_DIR_PATH':
                     self.__set_local_dir_path(value)
 
-                elif key == "SYNCHRONIZATION_PERIOD":
+                elif key == 'SYNCHRONIZATION_PERIOD':
                     self.__period = int(value)
 
         except (KeyError, ValueError) as e:
@@ -132,7 +141,7 @@ class EnvLoader():
 
             return
 
-        dirs = path_.split("/")
+        dirs = path_.split('/')
         local_dir_path = Path.home().absolute().joinpath(*dirs)
 
         if local_dir_path.exists():

@@ -1,7 +1,7 @@
-from src.yandex_loader.CloudLoaderAbstraction import CloudLoaderAbstraction
+from .CloudLoaderABC import CloudLoaderABC
 
 
-class CloudLoader(CloudLoaderAbstraction):
+class CloudLoader(CloudLoaderABC):
     """Cloud loader implementation
     """
 

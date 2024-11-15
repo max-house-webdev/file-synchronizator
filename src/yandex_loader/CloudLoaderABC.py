@@ -6,8 +6,8 @@ import requests
 
 
 @dataclass
-class CloudLoaderAbstraction(ABC):
-    """Cloud loader abstraction implementation
+class CloudLoaderABC(ABC):
+    """Cloud loader abstraction
 
     use yandex disk api
     """
@@ -25,6 +25,7 @@ class CloudLoaderAbstraction(ABC):
         """
         return {
             "Content-Type": "application/json",
+            "Accept": "application/json",
             "Authorization": f"OAuth {self._token}"
         }
 

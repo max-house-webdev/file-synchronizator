@@ -1,9 +1,9 @@
 import os
 
-from src.file_observer.FileObserverAbstraction import FileObserverAbstraction
+from .FileObserverABC import FileObserverABC
 
 
-class FileObserver(FileObserverAbstraction):
+class FileObserver(FileObserverABC):
     """File observer implementation
     """
 
